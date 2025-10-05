@@ -73,39 +73,6 @@ python number_plate_detection.py --source path/to/video.mp4
 - Bounding boxes drawn around detected number plates.  
 - Labels showing detection confidence.
 
-![Example Output](ad7d04b6-fffe-4ce0-b1e9-851371b60d59.png)
-
-## 🛠️ Troubleshooting
-
-### ❌ Error: "The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support."
-✅ Fix:
-```bash
-pip uninstall opencv-python
-pip install opencv-python-headless==4.12.0.88
-```
-
-### ❌ Error: "Could not find a version that satisfies the requirement"
-✅ Fix:
-Install the available version:
-```bash
-pip install opencv-python-headless==4.11.0.86
-```
-
-### ❌ CUDA not available
-✅ Fix:
-If you don’t have a GPU, YOLOv8 will automatically use CPU.  
-You’ll see:
-```
-Neither CUDA nor MPS are available - defaulting to CPU.
-```
-
-## 🧾 Requirements File Example
-```txt
-ultralytics==8.2.31
-torch>=2.0
-opencv-python==4.12.0.88
-numpy>=1.24
-```
 
 ## 🚀 Future Improvements
 - Add OCR for automatic number extraction (e.g., using Tesseract).
