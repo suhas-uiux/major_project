@@ -1,32 +1,52 @@
-# 🚗 Real-Time Number Plate Detection Using YOLOv8
-This project performs **real-time number plate detection** using **YOLOv8** and **OpenCV**. It captures frames from your webcam, detects number plates, and displays bounding boxes around them in real-time. You can also adapt it for **CCTV, video streams**, or **image-based detection**.
+# 🚗 Number Plate Detection & MongoDB Automation
 
-## 📦 Features
-- Real-time video capture using webcam.
-- Fast and accurate number plate detection using YOLOv8.
-- Works on **CPU** and **GPU**.
-- Easily extendable to OCR (Optical Character Recognition) for reading plate numbers.
+This project uses **EasyOCR** and **OpenCV** to automatically detect vehicle number plates from a live camera feed and store the detected text directly into **MongoDB Atlas**.  
+It’s designed for real-time automation scenarios like smart parking systems, toll management, and vehicle entry logging.
 
-## 🧠 Tech Stack
-- **Python 3.8+**
-- **OpenCV**
-- **Ultralytics YOLOv8**
-- **Torch**
-- **Numpy**
+---
 
-## ⚙️ Installation
+## 🧠 Features
+
+- 📸 Real-time number plate detection using webcam  
+- 🔍 Text extraction using **EasyOCR**  
+- 💾 Automatic insertion of detected text into **MongoDB Atlas**  
+- 🧱 Clean, modular, and maintainable Python project structure  
+- ⚡ Easy to extend for smart automation or cloud-based systems  
+
+---
+
+## 📁 Project Structure
+
+```
+numberplate_detection/
+│
+├── main.py                # Entry point: runs camera and performs OCR
+├── ocr_module.py          # Contains plate detection & text extraction logic
+├── db_module.py           # Handles MongoDB connection and data insertion
+├── config.py              # Stores MongoDB credentials and configuration
+├── utils.py               # (Optional) Utility functions like text cleaning
+├── requirements.txt       # Python dependencies
+└── README.md              # Project documentation
+```
+
+---
+
+## 🧩 Installation & Setup
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/number-plate-detection.git
-cd number-plate-detection
+git clone https://github.com/your-username/numberplate_detection.git
+cd numberplate_detection
 ```
 
-### 2️⃣ Create and Activate Virtual Environment
+### 2️⃣ Create and Activate Virtual Environment (Recommended)
 ```bash
 python -m venv venv
-venv\Scripts\activate   # For Windows
-# source venv/bin/activate  # For Linux/Mac
+# Activate it
+# On Windows
+venv\Scripts\activate
+# On Mac/Linux
+source venv/bin/activate
 ```
 
 ### 3️⃣ Install Dependencies
@@ -34,52 +54,88 @@ venv\Scripts\activate   # For Windows
 pip install -r requirements.txt
 ```
 
-If you face OpenCV display issues, install the **headless version**:
+### 4️⃣ Configure MongoDB Connection
+Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+
+Then edit `config.py`:
+```python
+MONGO_URI = "your_mongodb_atlas_connection_uri_here"
+DB_NAME = "numberplates_db"
+COLLECTION_NAME = "plates"
+```
+
+---
+
+## ⚙️ How It Works
+
+1. **main.py** starts the webcam feed.  
+2. Each frame is passed to **ocr_module.py**, where:
+   - Number plate region is detected using contours.
+   - EasyOCR extracts text from the detected region.
+3. Extracted text is inserted into MongoDB using **db_module.py**.  
+4. The console logs show both detected plate numbers and inserted document IDs.
+
+---
+
+## ▶️ Running the Project
+
+Run the following command:
 ```bash
-pip uninstall opencv-python
-pip install opencv-python-headless==4.12.0.88
+python main.py
 ```
 
-## 📁 Project Structure
-```
-📦 number-plate-detection
- ┣ 📜 number_plate_detection.py     # Main detection script
- ┣ 📜 requirements.txt              # Dependencies list
- ┣ 📜 README.md                     # Documentation
- ┗ 📁 runs/                         # YOLO output results (auto-generated)
+- Press **‘q’** to exit the video window.  
+- Detected number plates will be printed in the console and stored in MongoDB.
+
+---
+
+## 🗃️ Sample MongoDB Document
+
+Example document inserted into your collection:
+```json
+{
+  "_id": "6719ef81aabc1234f1d23f45",
+  "plate": "KA01AB1234"
+}
 ```
 
-## ▶️ Usage
+---
 
-### Run the Detection Script
+## 💡 Optional Enhancements
+
+- 🚫 **Avoid duplicate entries** for same number plate within a session.  
+- 🕒 **Add timestamp & location** fields to MongoDB documents.  
+- ☁️ **Integrate with Flask API** to fetch all stored plate records.  
+- 🧠 **Train YOLO / OpenCV Haar Cascade** for better plate localization.  
+- 📬 **Send detected plate data** to an external dashboard or REST API.
+
+---
+
+## 🧰 Dependencies
+
+| Library | Description |
+|----------|-------------|
+| `opencv-python` | For webcam access and image processing |
+| `imutils` | Simplifies OpenCV contour operations |
+| `easyocr` | Extracts text from images |
+| `pymongo` | Connects and inserts data into MongoDB Atlas |
+
+Install all via:
 ```bash
-python number_plate_detection.py
+pip install -r requirements.txt
 ```
 
-If you want to detect number plates from an image:
-```bash
-python number_plate_detection.py --source path/to/image.jpg
-```
+---
 
-To detect from a video file:
-```bash
-python number_plate_detection.py --source path/to/video.mp4
-```
+## 🧑‍💻 Author
 
-## 🧩 Example Output
+**Suhas Sabambargi**  
+💼 Role: Developer & Designer  
+📧 Email: *[your email here]*  
+🌐 GitHub: [your-username](https://github.com/your-username)
 
-**Input:** Real-time webcam feed  
-**Output:**  
-- Bounding boxes drawn around detected number plates.  
-- Labels showing detection confidence.
+---
 
+## 📜 License
 
-## 🚀 Future Improvements
-- Add OCR for automatic number extraction (e.g., using Tesseract).
-- Build a Flask/Streamlit web dashboard for live detection.
-- Store detected plates in a database for tracking.
-
-
-## 🪪 License
-This project is licensed under the **MIT License** — you are free to use, modify, and distribute it.
-
+This project is licensed under the MIT License — you can freely use, modify, and distribute it.
